@@ -281,3 +281,8 @@ body.space .site-header nav{font-size:10px;letter-spacing:.16em}
 .chapter-stats b{font-family:var(--display)!important;font-weight:400!important;font-size:36px!important;letter-spacing:-.02em!important;color:var(--text)!important}
 body.space .button{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.14em}
 body.space .button.lime{background:var(--lime)}
+
+/* Outage screen actions (archive search down) */
+.outage-actions{pointer-events:auto;margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.outage-actions>div{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.outage-actions small{font:500 10px var(--mono);letter-spacing:.08em;color:var(--dim)}

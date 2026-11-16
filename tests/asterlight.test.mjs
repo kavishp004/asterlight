@@ -188,3 +188,29 @@ test('live: /api/archive search returns observations (needs IRSA search online)'
   assert.ok(body.records.length > 1, 'several Barnard observations');
   assert.ok(body.records.every(x => x.detector === 2 && /^\/ibe\/data\/spherex\//.test(x.uri)));
 });
+
+// ------------------------------------------ outage fallback (saved lists)
+test('snapshot: matches only the same field centre and detector', async () => {
+  const {findSnapshot} = await mod('lib/snapshot.mjs');
+  const snaps = {targets: {x: {name: 'X', ra: 10, dec: 20, detectors: {2: {retrievedAt: '2026-01-01T00:00:00Z', records: [{id: 'a'}]}}}}};
+  assert.equal(findSnapshot({ra: 10.0002, dec: 20.0002, detector: 2}, snaps)?.key, 'x');
+  assert.equal(findSnapshot({ra: 10, dec: 20, detector: 3}, snaps), null);
+  assert.equal(findSnapshot({ra: 10.05, dec: 20, detector: 2}, snaps), null);
+  assert.equal(findSnapshot({ra: 359.9999, dec: 0, detector: 2}, {targets: {w: {name: 'W', ra: 0.0001, dec: 0, detectors: {2: {retrievedAt: 'x', records: [{}]}}}}})?.key, 'w');
+});
+test('snapshot: saved Barnard list is real, valid and labelled as saved', async () => {
+  const {findSnapshot, snapshotResponse} = await mod('lib/snapshot.mjs');
+  const t = targets.barnard, found = findSnapshot({ra: t.ra, dec: t.dec, detector: 2});
+  assert.ok(found && found.records.length >= 10, 'Barnard D2 list saved');
+  assert.ok(found.records.every(r => r.detector === 2 && /^\/ibe\/data\/spherex\/(dr1|qr3)\/level2\/[\w./-]+\.fits$/.test(r.uri)));
+  const body = snapshotResponse(found);
+  assert.equal(body.total, found.records.length);
+  assert.match(body.warnings[0], /saved on .* still downloaded live/);
+});
+test('api handler: Barnard search answers even if IRSA search is down', async () => {
+  const {default: arch} = await mod('api/archive.js');
+  const t = targets.barnard, r = await call(arch, `/api/archive?ra=${t.ra}&dec=${t.dec}&detector=2&fov=12`);
+  assert.equal(r.status, 200);
+  assert.ok(r.body.records.length > 1);
+  if (r.body.snapshot) assert.equal(r.body.snapshot.target, 'barnard');
+});

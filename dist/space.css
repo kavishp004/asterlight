@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+/* Asterlight voyage theme.
+   Loaded after styles.css and only overrides it, so styles.css can keep
+   changing upstream without conflicts. Scoped to body.space (index.html). */
+
+body.space{
+  --space:#03050b;--glass:rgba(10,14,24,.66);--glass-2:rgba(16,22,36,.72);--edge:rgba(214,226,255,.1);--edge-2:rgba(214,226,255,.18);
+  --text:#e8edf6;--soft:#a9b2c5;--dim:#7d869b;--lime:#d9ef85;--mono:'Geist Mono',ui-monospace,Menlo,monospace;
+  --display:'Instrument Serif',Georgia,serif;--dot:'Geist Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif;
+  --g1-rgb:217,239,133;--sans:'Geist','DM Sans',system-ui,sans-serif;
+  --line:var(--edge);
+  background:var(--space);color:var(--text);font-family:var(--sans);
+}
+body.space ::selection{background:var(--lime);color:#0b1220}
+
+/* ---------- the sky behind everything ---------- */
+.cosmos{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;
+  filter:brightness(calc(1 - var(--post,0) * .5)) saturate(calc(1 - var(--post,0) * .2))}
+.lens{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 85% 80% at 50% 50%,transparent 58%,rgba(3,5,11,.55) 85%,rgba(3,5,11,.92) 100%)}
+body.space>:not(.cosmos,.lens,.preloader,.skip,.cursor-glow,.progress){position:relative;z-index:2}
+
+/* ---------- preloader: wordmark of squares ---------- */
+.preloader{position:fixed!important;inset:0;z-index:50!important;background:var(--space);transition:opacity .6s ease;animation:preloader-failsafe .6s ease 3.2s forwards}
+.preloader canvas{width:100%;height:100%;display:block}
+.preloader.gone{opacity:0;pointer-events:none}
+@keyframes preloader-failsafe{to{opacity:0;visibility:hidden}}
+
+/* ---------- header ---------- */
+body.space .site-header{position:absolute;inset:0 0 auto;border:0;background:linear-gradient(to bottom,rgba(3,5,11,.7),transparent);z-index:10}
+body.space .brand{color:var(--text)}
+body.space .brand span{color:var(--lime)}
+body.space .site-header nav a{color:var(--soft)}
+body.space .site-header nav a:hover{color:var(--lime)}
+body.space .header-note{color:var(--dim);font-family:var(--mono)}
+body.space .header-note i{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+
+/* ---------- voyage chapters ---------- */
+.voyage{position:relative}
+.chapter{position:relative;min-height:150vh}
+.chapter[data-chapter=launch]{min-height:140vh}
+.chapter[data-chapter=arrive]{min-height:165vh}
+.chapter-copy{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 7% 13vh max(7%,150px);max-width:min(640px,100%);
+  opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.chapter.is-active .chapter-copy{opacity:1;transform:none}
+.chapter[data-chapter=launch] .chapter-copy{justify-content:center}
+.chapter[data-chapter=arrive] .chapter-copy{max-width:none;align-items:center;text-align:center;justify-content:flex-end}
+.chapter-copy .eyebrow{font-family:var(--mono);font-weight:500;color:var(--lime);letter-spacing:2px;font-size:10px}
+.chapter-copy h1,.chapter-copy h2{color:var(--text);font-weight:500;letter-spacing:-.045em;line-height:1.02}
+.chapter-copy h1{font-size:clamp(46px,6vw,88px)}
+.chapter-copy h2{font-size:clamp(38px,4.6vw,66px)}
+.chapter-copy h1 em,.chapter-copy h2 em{color:var(--lime);letter-spacing:-.04em}
+.chapter-copy>p:not(.eyebrow){font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--soft);max-width:420px;margin:24px 0 0}
+.chapter[data-chapter=arrive] .chapter-copy>p{margin-inline:auto}
+.chapter-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.chapter-meta{font-family:var(--mono)!important;font-size:9px!important;letter-spacing:1px;color:var(--dim)!important;margin-top:38px!important}
+.chapter-stats{list-style:none;padding:0;margin:34px 0 0;display:flex;gap:34px;flex-wrap:wrap}
+.chapter-stats li{display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--edge-2);padding-left:14px}
+.chapter-stats b{font:500 22px/1 Manrope,sans-serif;letter-spacing:-.5px;color:var(--text)}
+.chapter-stats span{font:9px var(--mono);letter-spacing:.8px;text-transform:uppercase;color:var(--dim)}
+.arrive-steps{list-style:none;padding:0;margin:34px 0 34px;display:grid;grid-template-columns:repeat(3,minmax(0,220px));gap:14px;text-align:left}
+.arrive-steps li{display:flex;gap:12px;padding:14px 16px;border:1px solid var(--edge);border-radius:8px;background:rgba(10,14,24,.45);backdrop-filter:blur(8px)}
+.arrive-steps span{font:10px var(--mono);color:var(--lime)}
+.arrive-steps p{margin:0;font-size:12px;font-weight:550;color:var(--text)}
+.arrive-steps small{display:block;font-size:10px;font-weight:400;color:var(--dim);margin-top:5px}
+
+/* ---------- buttons ---------- */
+body.space .button.lime{background:var(--lime);color:#0b1220;box-shadow:0 0 0 1px rgba(var(--g1-rgb),.4),0 10px 40px -10px rgba(var(--g1-rgb),.55)}
+body.space .button.ghost{border-color:var(--edge-2);color:var(--text);background:rgba(10,14,24,.4);backdrop-filter:blur(6px)}
+body.space .button.ghost:hover{border-color:var(--lime)}
+body.space .button.dark{background:var(--lime);color:#0b1220}
+body.space .button.outline{border-color:var(--edge-2);color:var(--text)}
+
+/* ---------- fixed HUD: chapter nav, scroll hint, telemetry ---------- */
+.voyage-nav{position:fixed!important;left:30px;top:50%;transform:translateY(-50%);z-index:8!important;display:flex;flex-direction:column;gap:12px;transition:opacity .5s}
+.voyage-nav button{font:500 9px var(--mono);letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);text-align:left;padding:2px 0 2px 14px;position:relative}
+.voyage-nav button:before{content:'';position:absolute;left:0;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:1px;background:currentColor;opacity:.35;transition:all .3s}
+.voyage-nav button[aria-current=true]{color:var(--text)}
+.voyage-nav button[aria-current=true]:before{background:var(--lime);opacity:1;box-shadow:0 0 8px var(--lime)}
+.voyage-nav button:hover{color:var(--lime)}
+.scroll-hint{position:fixed!important;right:30px;top:50%;z-index:8!important;margin:0;font:500 9px var(--mono);letter-spacing:1.6px;text-transform:uppercase;color:var(--soft);
+  writing-mode:vertical-rl;transform:translateY(-50%);transition:opacity .4s;opacity:calc(1 - var(--voyage,0) * 14)}
+.scroll-hint span{display:inline-block;margin-top:10px;animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{50%{transform:translateY(5px)}}
+.telemetry{position:fixed!important;left:30px;bottom:22px;z-index:8!important;margin:0;font:500 9px var(--mono);letter-spacing:1.1px;color:var(--dim);transition:opacity .5s}
+body[data-voyage=explore] .voyage-nav,body[data-voyage=explore] .telemetry{opacity:0;pointer-events:none}
+
+/* ---------- the explorer, now floating in space ---------- */
+body.space .section-wrap{padding-top:90px}
+body.space .section-heading h2{color:var(--text)}
+body.space .eyebrow{color:var(--lime);font-family:var(--mono);font-weight:500}
+body.space h2 em{color:var(--lime)}
+body.space .status-pill{border-color:var(--edge-2);color:var(--soft);font-family:var(--mono);background:rgba(10,14,24,.5)}
+body.space .status-pill.busy{background:rgba(var(--g1-rgb),.12);color:var(--lime)}
+body.space .workbench{background:var(--glass);border-color:var(--edge);border-radius:14px;backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+  box-shadow:0 40px 120px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
+body.space .controls{background:rgba(255,255,255,.025);border-color:var(--edge)}
+body.space .evidence-panel{background:rgba(255,255,255,.02);border-color:var(--edge)}
+body.space .panel-title h3,body.space .desk-heading h3,body.space .evidence-panel h3{color:var(--text)}
+body.space .panel-title>span{color:var(--lime)}
+body.space .field-label,body.space .coordinate-fields label{color:var(--soft);font-family:var(--mono);font-weight:500}
+body.space .coordinate-fields small{color:var(--dim)}
+body.space .field-help,body.space .message,body.space .loading-progress{color:var(--dim)}
+body.space .message.error{color:#ff9b8a}
+body.space select,body.space input:not([type=range],[type=checkbox]),body.space textarea{background:rgba(3,5,11,.55);border-color:var(--edge-2);color:var(--text);color-scheme:dark}
+body.space select:focus,body.space input:focus,body.space textarea:focus{border-color:rgba(var(--g1-rgb),.6)}
+body.space :is(button,a,input,select,textarea,summary):focus-visible{outline-color:var(--lime)}
+body.space .text-button,body.space .icon-button,body.space .archive-link{color:var(--soft)}
+body.space .text-button:hover,body.space .icon-button:hover,body.space .archive-link:hover{color:var(--lime)}
+body.space .divider{border-color:var(--edge)}
+body.space .date-fields span{color:var(--dim)}
+body.space .view-tabs{border-color:var(--edge)}
+body.space .view-tabs button{color:var(--dim)}
+body.space .view-tabs button[aria-selected=true]{border-color:var(--lime);color:var(--text)}
+body.space .sky-stage{background:#02040a;border-color:var(--edge-2);border-radius:10px;box-shadow:0 0 0 1px rgba(var(--g1-rgb),.06),0 0 80px -20px rgba(0,0,0,.6)}
+body.space .empty-orbit{color:var(--lime)}
+body.space .empty-state h3{color:var(--text)}
+body.space .empty-state p{color:var(--soft)}
+body.space .stage-corner{font-family:var(--mono);color:var(--text)}
+body.space .stage-corner small{color:var(--soft)}
+body.space .playback input,body.space .contrast-label input,body.space .loading-progress progress{accent-color:var(--lime)}
+body.space .round-button{color:var(--text)}
+body.space .play-button{background:rgba(var(--g1-rgb),.1);border-color:rgba(var(--g1-rgb),.35);color:var(--lime)}
+body.space .filmstrip button[aria-current=true]{border-color:var(--lime)}
+body.space .filmstrip span{background:#0b1220;color:var(--soft)}
+body.space .display-controls,body.space .compare-controls{color:var(--soft);border-color:var(--edge)}
+body.space .display-controls input[type=checkbox],body.space .compare-controls input{accent-color:var(--lime)}
+body.space .science-note{background:rgba(var(--g1-rgb),.06);border-color:rgba(var(--g1-rgb),.5);color:var(--soft)}
+body.space .science-note.warning{background:rgba(255,155,105,.08);border-color:#ff9b69;color:#f2c9ad}
+body.space .desk-footer{border-color:var(--edge)}
+body.space .evidence-panel dt{color:var(--dim)}
+body.space .evidence-panel dd{color:var(--text);font-family:var(--mono)}
+body.space .quality-details{border-color:var(--edge)}
+body.space .quality-details summary{color:var(--soft)}
+body.space .quality-details p,body.space .quality-details li{color:var(--dim)}
+body.space .marker-coordinates{color:var(--lime);font-family:var(--mono)}
+body.space .data-strip{color:var(--dim);font-family:var(--mono)}
+body.space .data-strip i{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+body.space .data-strip a{color:var(--soft)}
+
+/* ---------- field guide + footer ---------- */
+body.space .field-guide{background:rgba(10,14,24,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-block:1px solid var(--edge)}
+body.space .field-guide h2{color:var(--text)}
+body.space .field-guide h2 em{color:var(--lime)}
+body.space .field-guide>div>p:not(.eyebrow),body.space .field-guide li p{color:var(--soft)}
+body.space .field-guide a{color:var(--lime)}
+body.space .field-guide li{border-color:var(--edge)}
+body.space .field-guide li>span{color:var(--lime);font-family:var(--mono)}
+body.space .field-guide h3{color:var(--text)}
+body.space footer p,body.space footer small{color:var(--dim)}
+body.space footer>a:not(.brand){color:var(--soft)}
+
+/* ---------- small screens ---------- */
+@media(max-width:860px){
+  .voyage-nav,.scroll-hint{display:none}
+  .chapter-copy{justify-content:flex-start;padding:110px 6% 0}
+  .chapter[data-chapter=launch] .chapter-copy{justify-content:flex-start;padding-top:120px}
+  .chapter[data-chapter=arrive] .chapter-copy{justify-content:flex-end;padding-bottom:10vh}
+  .chapter-copy>p:not(.eyebrow){font-size:11px}
+  .arrive-steps{grid-template-columns:1fr;width:100%}
+  .telemetry{left:16px;right:16px;bottom:12px;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+@media(prefers-reduced-motion:reduce){
+  .chapter-copy{transition:none;transform:none}
+  .preloader{display:none}
+}
+
+/* =====================================================================
+   Typography — Instrument Serif headlines, Geist Mono labels,
+   Geist for reading, Geist Mono for data.
+   ===================================================================== */
+body.space .brand{font-family:var(--display);font-weight:500;letter-spacing:-.06em;font-size:24px}
+body.space .brand span{display:inline-block;animation:spin-star 14s linear infinite;font-family:var(--serif);font-size:20px}
+@keyframes spin-star{to{transform:rotate(360deg)}}
+body.space h1,body.space h2,body.space h3{font-family:var(--display);font-weight:400}
+.chapter-copy h1,.chapter-copy h2{font-family:var(--display);font-weight:400;letter-spacing:-.065em;line-height:.98}
+.chapter-copy h1{font-size:clamp(40px,5.4vw,84px)}
+.chapter-copy h2{font-size:clamp(32px,4.1vw,60px)}
+body.space h1 em,body.space h2 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em;color:var(--lime)}
+@keyframes sheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+body.space .section-heading h2{font-size:clamp(28px,3vw,42px);letter-spacing:-.06em}
+body.space .field-guide h2{font-size:clamp(28px,3vw,40px);letter-spacing:-.06em;line-height:1.1}
+body.space .panel-title h3,body.space .desk-heading h3,body.space .evidence-panel h3,body.space .field-guide h3{font-family:var(--display);font-weight:400;letter-spacing:-.04em}
+.chapter-stats b{font-family:var(--display)!important;font-weight:400!important;letter-spacing:-.05em!important}
+.arrive-steps p{font-family:var(--display);font-weight:400;letter-spacing:-.03em}
+body.space .button{font-family:var(--mono);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:11px;border-radius:999px;padding:13px 20px}
+body.space .button span{font-family:var(--sans)}
+body.space .site-header nav{font-family:var(--mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+
+/* =====================================================================
+   Motion
+   ===================================================================== */
+/* Chapter copy: each line rises out of a blur, one after another. */
+.chapter-copy>*{opacity:0;transform:translateY(34px);filter:blur(10px);transition:opacity .9s ease,transform 1.1s cubic-bezier(.16,1,.3,1),filter .9s ease}
+.chapter.is-active .chapter-copy>*{opacity:1;transform:none;filter:none}
+.chapter.is-active .chapter-copy>:nth-child(2){transition-delay:.08s}
+.chapter.is-active .chapter-copy>:nth-child(3){transition-delay:.18s}
+.chapter.is-active .chapter-copy>:nth-child(4){transition-delay:.28s}
+.chapter.is-active .chapter-copy>:nth-child(5){transition-delay:.38s}
+.chapter-copy{transform:none!important;opacity:1!important}
+.chapter-stats li,.arrive-steps li{opacity:0;transform:translateY(16px) scale(.97);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.chapter.is-active .chapter-stats li,.chapter.is-active .arrive-steps li{opacity:1;transform:none}
+.chapter.is-active :is(.chapter-stats,.arrive-steps) li:nth-child(1){transition-delay:.35s}
+.chapter.is-active :is(.chapter-stats,.arrive-steps) li:nth-child(2){transition-delay:.47s}
+.chapter.is-active :is(.chapter-stats,.arrive-steps) li:nth-child(3){transition-delay:.59s}
+.arrive-steps li{transition-property:opacity,transform,border-color,background}
+.arrive-steps li:hover{border-color:rgba(var(--g1-rgb),.45);background:rgba(var(--g1-rgb),.06)}
+
+/* Scroll reveal for the explorer and guide. */
+[data-reveal]{opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s ease,transform 1.2s cubic-bezier(.16,1,.3,1),filter 1s ease;transition-delay:var(--d,0s)}
+[data-reveal].is-in{opacity:1;transform:none;filter:none}
+
+/* Buttons: a light sweep and a breathing glow. */
+body.space .button{position:relative;overflow:hidden;isolation:isolate;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,border-color .3s}
+body.space .button:after{content:'';position:absolute;inset:-2px;z-index:-1;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+body.space .button:hover:after{transform:translateX(120%)}
+body.space .button:hover{transform:translateY(-2px)}
+body.space .button span{transition:transform .35s cubic-bezier(.16,1,.3,1)}
+body.space .button:hover span{transform:translate(3px,-1px)}
+body.space .button.lime{animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 0 0 1px rgba(var(--g1-rgb),.6),0 12px 60px -6px rgba(var(--g1-rgb),.75)}}
+
+/* Header links draw an underline; the live dots pulse. */
+body.space .site-header nav a{position:relative;padding:6px 0}
+body.space .site-header nav a:after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--lime);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+body.space .site-header nav a:hover:after{transform:scaleX(1);transform-origin:left}
+body.space .header-note i,body.space .data-strip i{animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(var(--g1-rgb),.7)}100%{box-shadow:0 0 0 9px rgba(var(--g1-rgb),0)}}
+body.space .status-pill.busy{animation:busy 1.4s ease-in-out infinite}
+@keyframes busy{50%{border-color:rgba(var(--g1-rgb),.7)}}
+
+/* The sky stage gets an orbiting light around its rim. */
+@property --orbit{syntax:'<angle>';inherits:false;initial-value:0deg}
+body.space .sky-stage{isolation:isolate}
+body.space .sky-stage:before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;z-index:3;pointer-events:none;
+  background:conic-gradient(from var(--orbit),transparent 0 70%,rgba(var(--g1-rgb),.9) 82%,rgba(255,255,255,.6) 88%,transparent 95%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:orbit 6s linear infinite}
+@keyframes orbit{to{--orbit:360deg}}
+body.space .empty-orbit{animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px) rotate(45deg)}}
+body.space .workbench{transition:box-shadow .6s}
+body.space .workbench:hover{box-shadow:0 40px 140px -40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06)}
+body.space .filmstrip button{transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s}
+body.space .filmstrip button:hover{transform:translateY(-3px)}
+body.space .field-guide li{transition:transform .5s cubic-bezier(.16,1,.3,1)}
+body.space .field-guide li:hover{transform:translateX(8px)}
+
+/* Cursor light and page progress. */
+.cursor-glow{position:fixed!important;inset:0;z-index:1!important;pointer-events:none;
+  background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.05),rgba(255,255,255,.015) 40%,transparent 70%)}
+.progress{position:fixed!important;top:0;left:0;right:0;height:2px;z-index:20!important;transform-origin:left;transform:scaleX(var(--page,0));
+  background:var(--lime);box-shadow:0 0 12px rgba(var(--g1-rgb),.6)}
+
+@media(max-width:860px){.cursor-glow{display:none}body.space .brand{font-size:19px}}
+@media(prefers-reduced-motion:reduce){
+  .chapter-copy>*,[data-reveal],.chapter-stats li,.arrive-steps li{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  body.space h1 em,body.space h2 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em;color:var(--lime)}
+}
+
+/* =====================================================================
+   Type pass: serif headlines, mono instrument labels, one lime accent
+   ===================================================================== */
+body.space .brand{font-family:var(--sans);font-weight:600;letter-spacing:-.045em}
+body.space .brand span{font-family:var(--serif);font-weight:400;color:var(--lime)}
+.chapter-copy h1,.chapter-copy h2,body.space .section-heading h2,body.space .field-guide h2{font-family:var(--display);font-weight:400;letter-spacing:-.025em;line-height:.98;color:var(--text)}
+.chapter-copy h1 em,.chapter-copy h2 em{display:inline-block;padding-bottom:.06em}
+.chapter-copy h1{font-size:clamp(52px,6.8vw,112px)}
+.chapter-copy h2{font-size:clamp(42px,5vw,80px)}
+body.space .panel-title h3,body.space .desk-heading h3,body.space .evidence-panel h3,body.space .field-guide h3{font-family:var(--display);font-weight:400;letter-spacing:-.01em;font-size:1.25em}
+.arrive-steps p{font-family:var(--sans);font-weight:500;letter-spacing:-.01em}
+/* Dot-matrix labels. */
+body.space .eyebrow,.chapter-copy .eyebrow,.voyage-nav button,.scroll-hint,.telemetry,.chapter-meta,body.space .site-header nav,body.space .header-note,
+body.space .status-pill,.arrive-steps span,body.space .field-guide li>span,body.space .stage-corner span,body.space .data-strip>span{font-family:var(--dot)!important;font-weight:500!important}
+.chapter-copy .eyebrow{font-size:10px!important;letter-spacing:.2em}
+body.space .eyebrow{font-size:10px;letter-spacing:.18em}
+.voyage-nav button{font-size:9px!important;letter-spacing:.18em}
+.telemetry{font-size:9px!important;letter-spacing:.12em}
+.scroll-hint{font-size:9px!important}
+body.space .site-header nav{font-size:10px;letter-spacing:.16em}
+.chapter-meta{font-size:9px!important}
+.chapter-stats b{font-family:var(--display)!important;font-weight:400!important;font-size:36px!important;letter-spacing:-.02em!important;color:var(--text)!important}
+body.space .button{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.14em}
+body.space .button.lime{background:var(--lime)}

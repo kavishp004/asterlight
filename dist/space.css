@@ -286,3 +286,6 @@ body.space .button.lime{background:var(--lime)}
 .outage-actions{pointer-events:auto;margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:14px}
 .outage-actions>div{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .outage-actions small{font:500 10px var(--mono);letter-spacing:.08em;color:var(--dim)}
+
+/* Keep units like μm in their real case inside uppercase labels. */
+.unit{text-transform:none!important;letter-spacing:0}

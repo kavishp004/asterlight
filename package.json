@@ -4,6 +4,6 @@
   "private":true,
   "type":"module",
   "description":"SPHEREx sky images through time, built for the 2026 Planet X and SPHEREx challenge.",
-  "scripts":{"start":"node server.mjs","test":"node --test tests/*.test.mjs","brief":"node scripts/build-brief.mjs"},
+  "scripts":{"start":"node server.mjs","test":"node --test tests/*.test.mjs","test:live":"ASTERLIGHT_BASE=https://asterlight.vercel.app node --test tests/*.test.mjs","brief":"node scripts/build-brief.mjs"},
   "engines":{"node":">=22"}
 }
